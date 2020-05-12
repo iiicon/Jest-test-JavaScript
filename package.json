@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "dependencies": {
     "babel-core": "^6.26.3",
