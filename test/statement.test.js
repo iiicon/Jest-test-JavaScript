@@ -5,6 +5,6 @@ import plays from "../src/statement/plays";
 test("测试打印信息", () => {
   let result = statement(invoice, plays);
   console.log(result)
-  expect(result).toMatch(/Statement for/);
+  expect(result).toMatch(/Amount owed is \$1,640.00/);
 });
 
