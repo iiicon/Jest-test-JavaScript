@@ -1,29 +1,39 @@
 function statement(invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
-  const usd = function(aNumber) {
+
+  for (let perf of invoice.performances) {
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    } seats)\n`;
+  }
+
+  result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
+  result += `You earned ${totalVolumeCredits()} credits\n`;
+  return result;
+
+  function totalAmount() {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      result += amountFor(perf);
+    }
+    return result;
+  }
+
+  function totalVolumeCredits() {
+    let volumeCredits = 0;
+    for (let perf of invoice.performances) {
+      volumeCredits += volumeCreditsFor(perf);
+    }
+    return volumeCredits;
+  }
+
+  function usd(aNumber) {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 2
     }).format(aNumber);
-  };
-
-  for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf, playFor(perf));
-
-    // volume credits
-    volumeCredits += volumeCreditsFor(perf);
-    // print line for this order
-    result += ` ${playFor(perf).name}: ${usd(thisAmount / 100)} (${
-      perf.audience
-    } seats)\n`;
-    totalAmount += thisAmount;
-  } // 修改变量快捷键
-  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
-  result += `You earned ${volumeCredits} credits\n`;
-  return result;
+  }
 
   function volumeCreditsFor(aPerformance) {
     let result = 0;
