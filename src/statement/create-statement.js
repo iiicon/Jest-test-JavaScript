@@ -1,11 +1,12 @@
-function statement(invoice, plays) {
+export function createStatementData(invoice, plays) {
   const statementData = {};
+
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
 
-  return renderPlainText(statementData);
+  return statementData;
 
   function enrichPerformance(aPerformance) {
     const result = Object.assign({}, aPerformance);
@@ -58,30 +59,9 @@ function statement(invoice, plays) {
   }
 
   function totalVolumeCredits(data) {
-    return data.performances.reduce((prev, curr) => prev + curr.volumeCredits, 0);
+    return data.performances.reduce(
+      (prev, curr) => prev + curr.volumeCredits,
+      0
+    );
   }
 }
-
-function renderPlainText(data) {
-  let result = `Statement for ${data.customer}\n`;
-
-  for (let perf of data.performances) {
-    result += ` ${perf.play.name}: ${usd(perf.amount)} (${
-      perf.audience
-    } seats)\n`;
-  }
-
-  result += `Amount owed is ${usd(data.totalAmount / 100)}\n`;
-  result += `You earned ${data.totalVolumeCredits} credits\n`;
-  return result;
-
-  function usd(aNumber) {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2
-    }).format(aNumber);
-  }
-}
-
-export { statement };

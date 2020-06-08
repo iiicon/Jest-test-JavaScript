@@ -1,4 +1,4 @@
-import { statement } from "../src/statement/index";
+import { statement } from "../src/statement/statement";
 import invoice from "../src/statement/invoice";
 import plays from "../src/statement/plays";
 
